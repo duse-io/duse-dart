@@ -1,0 +1,15 @@
+name: duse
+version: 0.0.1
+description: A minimal command-line application.
+#author: <your name> <email@example.com>
+#homepage: https://www.example.com
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  restpoint:
+    git: git://github.com/Adracus/restpoint.git
+  secret_sharing:
+    git: git://github.com/duse-io/secret-sharing-dart.git
+  rsa: any
+dev_dependencies:
+  unittest: any
