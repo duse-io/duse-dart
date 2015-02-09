@@ -14,14 +14,15 @@ class DuseClient {
   String _token;
   KeyPair _private;
   
-  DuseClient(Uri baseUri)
-      : client = initializeClient(baseUri);
+  DuseClient(Uri baseUri, ClientFactory clientFactory)
+      : client = initializeClient(baseUri, clientFactory);
   
   Map<String, String> get authorizationHeader =>
       {"authorization": _token};
   
-  static RestClient initializeClient(Uri baseUri) {
-    var client = new RestClient(baseUri);
+  static RestClient initializeClient(Uri baseUri,
+                                     ClientFactory clientFactory) {
+    var client = new RestClient(baseUri, clientFactory);
     var users = new ResourceBuilder(client, "users")
                       .addTypedProperty("id", type: int)
                       .addTypedProperty("username", type: String)
