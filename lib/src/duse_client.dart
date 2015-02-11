@@ -11,14 +11,14 @@ import 'package:rsa/rsa.dart';
 
 class DuseClient {
   final RestClient client;
-  String _token;
+  String token;
   KeyPair _private;
   
   DuseClient(Uri baseUri, ClientFactory clientFactory)
       : client = initializeClient(baseUri, clientFactory);
   
   Map<String, String> get authorizationHeader =>
-      {"authorization": _token};
+      {"authorization": token};
   
   static RestClient initializeClient(Uri baseUri,
                                      ClientFactory clientFactory) {
@@ -112,7 +112,7 @@ class DuseClient {
         body: {"username" : username,
                "password" : password}).then((response) {
       checkResponse(response, 201);
-      return _token = JSON.decode(response.body)["api_token"];
+      return token = JSON.decode(response.body)["api_token"];
     });
   }
   
@@ -136,7 +136,7 @@ class DuseClient {
     return client.slash("users").all(headers: authorizationHeader);
   }
   
-  bool get isLoggedIn => null != _token;
+  bool get isLoggedIn => null != token;
   bool get hasPrivateKey => null != _private;
   
   void checkLoggedIn() {
