@@ -28,6 +28,7 @@ class DuseClient {
                       .addTypedProperty("username", type: String)
                       .addProperty("public_key",
                           inTransformer: (key) => KeyPair.parsePem(key))
+                      .addTypedProperty("email", type: String)
                       .build();
     var secrets = new ResourceBuilder(client, "secrets")
                       .addTypedProperty("id", type: int)
@@ -104,9 +105,11 @@ class DuseClient {
     });
   }
   
-  Future login(String username, String password) {
+  Future login(String username, String email, String password) {
     return client.post("users/token",
-        body: {"username": username, "password": password}).then((response) {
+        body: {"username" : username,
+               "password" : password,
+               "email"    : email}).then((response) {
       checkResponse(response, 201);
       return _token = JSON.decode(response.body)["api_token"];
     });
