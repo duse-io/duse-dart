@@ -136,12 +136,15 @@ class DuseClient {
     return client.slash("users").all(headers: authorizationHeader);
   }
   
+  bool get isLoggedIn => null != _token;
+  bool get hasPrivateKey => null != _private;
+  
   void checkLoggedIn() {
-    if (null == _token) throw new NotLoggedInException();
+    if (!isLoggedIn) throw new NotLoggedInException();
   }
   
   void checkPrivateKey() {
-    if (null == _private) throw new KeysMissingException.private();
+    if (!hasPrivateKey) throw new KeysMissingException.private();
   }
 }
 
