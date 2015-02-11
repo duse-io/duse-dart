@@ -68,9 +68,11 @@ class DuseClient {
     });
   }
   
-  Future<Entity> createUser(String username, String password, String publickey) {
-    return client.slash("users").create(body: {"username": username,
-                                               "password": password,
+  Future<Entity> createUser(String username, String password,
+                            String email, String publickey) {
+    return client.slash("users").create(body: {"username" : username,
+                                               "password" : password,
+                                               "email"    : email,
                                                "public_key": publickey});
   }
   
@@ -105,11 +107,10 @@ class DuseClient {
     });
   }
   
-  Future login(String username, String email, String password) {
+  Future login(String username, String password) {
     return client.post("users/token",
         body: {"username" : username,
-               "password" : password,
-               "email"    : email}).then((response) {
+               "password" : password}).then((response) {
       checkResponse(response, 201);
       return _token = JSON.decode(response.body)["api_token"];
     });
