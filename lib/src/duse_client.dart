@@ -118,7 +118,7 @@ class DuseClient {
   
   Future getSecret(int id) {
     checkLoggedIn();
-    return client.slash("secret").id(id).one(headers: authorizationHeader);
+    return client.slash("secrets").id(id).one(headers: authorizationHeader);
   }
   
   Future deleteSecret(int id) {
