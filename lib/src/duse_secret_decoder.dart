@@ -24,7 +24,8 @@ class DuseFragment {
   
   String decode(KeyPair pair) {
     var stringShares = shares.map((cipher) => pair.decrypt(cipher))
-                             .map((share) => new StringShare.parse(share));
+                             .map((share) => new StringShare.parse(share))
+                             .toList();
     return new StringShareDecoder().convert(stringShares);
   }
 }

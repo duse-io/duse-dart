@@ -33,9 +33,9 @@ class DuseClient {
     var secrets = new ResourceBuilder(client, "secrets")
                       .addTypedProperty("id", type: int)
                       .addTypedProperty("title", type: String)
-                      .addProperty("shares",
-                          inTransformer: (shares) =>
-                              new decoder.DuseSecret.raw(shares))
+                      .addProperty("parts",
+                          inTransformer: (parts) =>
+                              new decoder.DuseSecret.raw(parts))
                       .addProperty("url",
                           inTransformer: (uri) => Uri.parse(uri))
                       .addProperty("users",
@@ -60,11 +60,10 @@ class DuseClient {
         "Only Strings or KeyPairs are supported");
   }
   
-  Future<Entity> getDecodedSecret(int id) {
+  Future<String> getDecodedSecret(int id) {
     checkPrivateKey();
     return getSecret(id).then((secret) {
-      var decoded = new decoder.DuseSecret(secret.shares).decode(_private);
-      return decoded;
+      return secret.parts.decode(_private);
     });
   }
   
@@ -107,7 +106,7 @@ class DuseClient {
     });
   }
   
-  Future login(String username, String password) {
+  Future<String> login(String username, String password) {
     return client.post("users/token",
         body: {"username" : username,
                "password" : password}).then((response) {
