@@ -74,6 +74,52 @@ class CommandLineClient {
     client.getDecodedSecret(_id).then(print);
   }
   
+  @SubCommand(
+      help: "Create a new secret")
+  createSecret() async {
+    _prepareForAuthorizedAction();
+    String title = prompt("Please enter your title");
+    String content = prompt("Please enter the secret's content");
+    List<Entity> selectedUsers =
+        [await client.getCurrentUser(), await client.getServerUser()];
+    
+    equals(int id1, int id2) => id1 == id2;
+    if (promptDecision("Do you want to share the secret?")) {
+      List<Entity> users = await client.listUsers() as List<Entity>;
+      users.removeWhere((e) => selectedUsers.any((s) => equals(s.id, e.id)));
+      print("Choose user[s] (separate multiple with ',')");
+      print(users.map((user) => "${user.id}: ${user.username}").join("\n"));
+      var chosen = stdin.readLineSync()
+                        .split(",")
+                        .map((str) => int.parse(str, onError: (s) => -1));
+      selectedUsers.addAll(users.where((user) => chosen.any((n) =>
+          equals(user.id, n))));
+    }
+    
+    this.client.privateKey = _privateKey;
+    this.client.createSecret(title, content,
+        selectedUsers.map((u) => u.id).toList()).then((secret) {
+      print("Created secret with title ${secret.title} and id ${secret.id}");
+    });
+  }
+  
+  String prompt(String question, {bool echoMode: true}) {
+    print(question);
+    var temp = stdin.echoMode;
+    stdin.echoMode = echoMode;
+    var answer = stdin.readLineSync();
+    stdin.echoMode = temp;
+    return answer;
+  }
+  
+  bool promptDecision(String decision, {bool yesDefault: true}) {
+    var append = yesDefault ? "[Y/n]" : "[y/N]";
+    print("$decision $append");
+    var answer = stdin.readLineSync().toLowerCase();
+    if ("" == answer) return yesDefault;
+    return "y" == answer;
+  }
+  
   String get _privateKey {
     return
 """-----BEGIN RSA PRIVATE KEY-----

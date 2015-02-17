@@ -85,6 +85,24 @@ class DuseClient {
     return client.slash("users").slash("me").one(headers: authorizationHeader);
   }
   
+  Future<Entity> getUser(int id) {
+    checkLoggedIn();
+    return client.slash("users").id(id).one(headers: authorizationHeader);
+  }
+  
+  Future<Entity> updateUser(int id, Map<String, dynamic> values) {
+    checkLoggedIn();
+    return client.slash("users").id(id).patch(body: values, headers: authorizationHeader);
+  }
+  
+  Future confirmToken(String token) {
+    return client.patch("users/confirm", body: {"token": token});
+  }
+  
+  Future resendConfirmation(String email) {
+    return client.post("users/confirm", body: {"email": email});
+  }
+  
   Future deleteUser(int id) {
     checkLoggedIn();
     return client.slash("users").delete(headers: authorizationHeader);
