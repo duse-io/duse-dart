@@ -95,8 +95,16 @@ class DuseClient {
     return client.slash("users").id(id).patch(body: values, headers: authorizationHeader);
   }
   
-  Future confirmToken(String token) {
+  Future confirmUser(String token) {
     return client.patch("users/confirm", body: {"token": token});
+  }
+  
+  Future forgotPassword(String email) {
+    return client.post("users/forgot_password", body: {"email": email});
+  }
+  
+  Future changePassword(String token, String newPassword) {
+    return client.slash("users").patch(body: {"token": token, "password": newPassword});
   }
   
   Future resendConfirmation(String email) {
