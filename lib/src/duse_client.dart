@@ -96,11 +96,17 @@ class DuseClient {
   }
   
   Future confirmUser(String token) {
-    return client.patch("users/confirm", body: {"token": token});
+    return client.patch("users/confirm", body: {"token": token})
+                 .then((response) {
+      checkResponse(response, 204);
+    });
   }
   
-  Future forgotPassword(String email) {
-    return client.post("users/forgot_password", body: {"email": email});
+  Future<String> forgotPassword(String email) {
+    return client.post("users/forgot_password", body: {"email": email})
+                 .then((response) {
+      checkResponse(response, 201);
+    });
   }
   
   Future changePassword(String token, String newPassword) {
@@ -108,7 +114,10 @@ class DuseClient {
   }
   
   Future resendConfirmation(String email) {
-    return client.post("users/confirm", body: {"email": email});
+    return client.post("users/confirm", body: {"email": email})
+                 .then((response) {
+      checkResponse(response, 201);
+    });
   }
   
   Future deleteUser(int id) {
