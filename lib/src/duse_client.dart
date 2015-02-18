@@ -150,6 +150,11 @@ class DuseClient {
     });
   }
   
+  void logout() {
+    this.token = null;
+    this._private = null;
+  }
+  
   Future getSecret(int id) {
     checkLoggedIn();
     return client.slash("secrets").id(id).one(headers: authorizationHeader);
