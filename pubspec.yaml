@@ -7,9 +7,13 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   restpoint:
-    git: git://github.com/Adracus/restpoint.git
+    git:
+      url: git://github.com/Adracus/restpoint.git
+      ref: 527ac55c0ee9b4e28c4d7cb7d0759a483e8a5d4d
   secret_sharing:
-    git: git://github.com/duse-io/secret-sharing-dart.git
+    git:
+      url: git://github.com/duse-io/secret-sharing-dart.git
+      ref: 8c58b227b0e5108b416dd49f2f0d1f6e5a7e4e3b
   rsa:
     git: git://github.com/Adracus/rsa.git
   unscripted: ">=0.5.2+1 <0.6.0"
