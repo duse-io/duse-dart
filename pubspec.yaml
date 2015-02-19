@@ -10,7 +10,8 @@ dependencies:
     git: git://github.com/Adracus/restpoint.git
   secret_sharing:
     git: git://github.com/duse-io/secret-sharing-dart.git
-  rsa: any
+  rsa:
+    git: git://github.com/Adracus/rsa.git
   unscripted: ">=0.5.2+1 <0.6.0"
 dev_dependencies:
   unittest: any
