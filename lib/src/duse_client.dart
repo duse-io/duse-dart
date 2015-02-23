@@ -14,6 +14,8 @@ class DuseClient {
   String token;
   KeyPair _private;
   
+  KeyPair get privateKey => _private;
+  
   DuseClient(Uri baseUri, ClientFactory clientFactory)
       : client = initializeClient(baseUri, clientFactory);
   
@@ -35,7 +37,7 @@ class DuseClient {
                       .addTypedProperty("title", type: String)
                       .addProperty("parts",
                           inTransformer: (parts) =>
-                              new decoder.DuseSecret.raw(parts))
+                              new decoder.EncodedSecret.raw(parts))
                       .addProperty("url",
                           inTransformer: (uri) => Uri.parse(uri))
                       .addProperty("users",
@@ -122,7 +124,7 @@ class DuseClient {
   
   Future deleteUser(int id) {
     checkLoggedIn();
-    return client.slash("users").delete(headers: authorizationHeader);
+    return client.slash("users").id(id).delete(headers: authorizationHeader);
   }
   
   Future<Entity> createSecret(String title, String secret, List<int> userIds) {
@@ -134,10 +136,8 @@ class DuseClient {
           new encoder.UserEncryptionInformation(user.id, user.public_key))
                              .toList();
       var encoded = new encoder.DuseSecret(title, secret, information, _private);
-      return client.slash("secrets").create(body: encoded.toJson(), headers: authorizationHeader)
-          .catchError((StatusException ex) {
-        print(ex.response.body);
-      });
+      return client.slash("secrets")
+                   .create(body: encoded.toJson(), headers: authorizationHeader);
     });
   }
   

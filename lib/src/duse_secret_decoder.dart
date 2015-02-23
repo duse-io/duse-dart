@@ -3,12 +3,12 @@ library duse.secret_decoder;
 import 'package:rsa/rsa.dart';
 import 'package:secret_sharing/secret_sharing.dart';
 
-class DuseSecret {
+class EncodedSecret {
   final List<DuseFragment> fragments;
   
-  DuseSecret(this.fragments);
+  EncodedSecret(this.fragments);
   
-  DuseSecret.raw(List<List<String>> shares)
+  EncodedSecret.raw(List<List<String>> shares)
       : fragments = shares.map((share) => new DuseFragment(share)).toList();
   
   String decode(KeyPair pair) {

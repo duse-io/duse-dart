@@ -1,6 +1,6 @@
 library duse.secret_encoder;
 
-import 'dart:math' show min;
+import 'dart:math' show min, Random;
 
 import 'package:secret_sharing/secret_sharing.dart';
 import 'package:rsa/rsa.dart';
@@ -60,8 +60,9 @@ class SecretFragment {
   
   static List<SecretPart> generateParts(String fragment,
       List<UserEncryptionInformation> users,
-      KeyPair private, int neededShares) {
-    var encoder = new StringShareEncoder(users.length, neededShares, new ASCIICharset());
+      KeyPair private, int neededShares, {Random random}) {
+    var encoder = new StringShareEncoder(users.length, neededShares,
+        new ASCIICharset(), random: random);
     var shares = encoder.convert(fragment);
     var parts = [];
     for (int i = 0; i < users.length; i++) {

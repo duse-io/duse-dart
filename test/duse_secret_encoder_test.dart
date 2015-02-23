@@ -1,17 +1,15 @@
-library duse_test;
+library duse.test.secret_encoder;
 
-import 'mock/keypair_mock.dart';
+import 'mock.dart';
 
 import 'package:duse/src/duse_secret_encoder.dart';
 import 'package:unittest/unittest.dart';
 import 'package:mock/mock.dart';
 
-void main() => defineTests();
-
 void defineTests() {
   group("SecretEncoder", () {
     group("DuseSecret", (){
-      group("divideSecret", () {
+      group("divideString", () {
         test("exact size", () {
           var test = "123456789";
           expect(DuseSecret.divideString(test, 9), equals(["123456789"]));
@@ -26,6 +24,42 @@ void defineTests() {
               "e split into some ",
               "parts"
           ]));
+        });
+        
+        test("generateFragments", () {
+          var private = new KeyPairMock()
+            ..when(callsTo("sign", anything))
+             .thenReturn("SIGNATURE1")
+             .thenReturn("SIGNATURE2");
+          var random = new RandomMock()
+            ..when(callsTo("nextInt")).alwaysReturn(0);
+          var public = new KeyPairMock()
+            ..when(callsTo("encrypt", anything))
+             .thenReturn("ENCRYPTED1")
+             .thenReturn("ENCRYPTED2");
+          var user = new UserInfoMock()
+            ..when(callsTo("get public")).alwaysReturn(public)
+            ..when(callsTo("get id")).thenReturn(1)
+                                     .thenReturn(2);  
+          var users = new List.filled(2, user);
+          
+          var fragments =
+              DuseSecret.generateFragments("my secret", users, private, 2, 10);
+          var parts = fragments.single.parts;
+          
+          expect(parts.first.share, equals("ENCRYPTED1"));
+          expect(parts.first.signature, equals("SIGNATURE1"));
+          expect(parts.last.share, equals("ENCRYPTED2"));
+          expect(parts.last.signature, equals("SIGNATURE2"));
+        });
+        
+        test("toJson", () {
+          var part = new SecretPart.raw(1, "share", "signature");
+          var fragment = new SecretFragment.raw([part]);
+          var secret = new DuseSecret.raw("title", [fragment]);
+          
+          expect(secret.toJson(),
+              equals({"title": "title", "parts": [fragment.toJson()]}));
         });
       });
     });
@@ -53,6 +87,42 @@ void defineTests() {
           "content": "test",
           "signature": "signature"
         }));
+      });
+    });
+    
+    group("SecretFragment", () {
+      test("generateParts", () {
+        var private = new KeyPairMock()
+          ..when(callsTo("sign", anything))
+           .thenReturn("SIGNATURE1")
+           .thenReturn("SIGNATURE2");
+        var random = new RandomMock()
+          ..when(callsTo("nextInt")).alwaysReturn(0);
+        var public = new KeyPairMock()
+          ..when(callsTo("encrypt", anything))
+           .thenReturn("ENCRYPTED1")
+           .thenReturn("ENCRYPTED2");
+        var user = new UserInfoMock()
+          ..when(callsTo("get public")).alwaysReturn(public)
+          ..when(callsTo("get id")).thenReturn(1)
+                                   .thenReturn(2);  
+        var users = new List.filled(2, user);
+        
+        var parts = SecretFragment.generateParts("fragment", users, private,
+            2, random: random);
+        
+        expect(parts.first.share, equals("ENCRYPTED1"));
+        expect(parts.first.signature, equals("SIGNATURE1"));
+        expect(parts.last.share, equals("ENCRYPTED2"));
+        expect(parts.last.signature, equals("SIGNATURE2"));
+      });
+      
+      test("toJson", () {
+        var part = new SecretPart.raw(1, "test", "signature");
+        var fragment = new SecretFragment.raw([part]);
+        
+        expect(fragment.toJson(), equals(
+            [part.toJson()]));
       });
     });
   });
