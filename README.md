@@ -1,5 +1,5 @@
 # duse
-[![Coverage Status](https://coveralls.io/repos/duse-io/duse-dart/badge.svg?branch=master)](https://coveralls.io/r/duse-io/duse-dart?branch=master)
+[![Build Status](https://travis-ci.org/duse-io/duse-dart.svg?branch=master)](https://travis-ci.org/duse-io/duse-dart) [![Coverage Status](https://coveralls.io/repos/duse-io/duse-dart/badge.svg?branch=master)](https://coveralls.io/r/duse-io/duse-dart?branch=master)
 > **Warning:** This implementation has not been tested in production nor has it been examined by a security audit.
 > All uses are your own responsibility.
 
