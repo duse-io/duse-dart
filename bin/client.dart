@@ -1,5 +1,4 @@
 import 'dart:io' show stdin, File, Platform;
-import 'dart:async' show Future;
 import 'dart:convert' show JSON;
 
 import 'package:restpoint/restpoint.dart';

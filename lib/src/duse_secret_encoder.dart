@@ -1,8 +1,10 @@
 library duse.secret_encoder;
 
 import 'dart:math' show min, Random;
+import 'dart:convert' show UTF8;
 
 import 'package:secret_sharing/secret_sharing.dart';
+import 'package:crypto/crypto.dart' show CryptoUtils;
 import 'package:rsa/rsa.dart';
 
 
@@ -24,6 +26,7 @@ class DuseSecret {
   static List<SecretFragment> generateFragments(String secret,
       List<UserEncryptionInformation> users,
       KeyPair private, int neededShares, int split) {
+    secret = utf8ToBase64(secret);
     var parts = divideString(secret, split);
     return parts.map((part) =>
         new SecretFragment(part, users, private, neededShares)).toList();
@@ -35,6 +38,11 @@ class DuseSecret {
       result.add(string.substring(i, min(string.length, i + split)));
     }
     return result;
+  }
+  
+  static String utf8ToBase64(String utf) {
+    var utfBytes = UTF8.encode(utf);
+    return CryptoUtils.bytesToBase64(utfBytes);
   }
 }
 

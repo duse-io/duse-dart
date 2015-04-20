@@ -1,5 +1,8 @@
 library duse.secret_decoder;
 
+import 'dart:convert' show UTF8;
+
+import 'package:crypto/crypto.dart' show CryptoUtils;
 import 'package:rsa/rsa.dart';
 import 'package:secret_sharing/secret_sharing.dart';
 
@@ -26,6 +29,12 @@ class DuseFragment {
     var stringShares = shares.map((cipher) => pair.decrypt(cipher))
                              .map((share) => new StringShare.parse(share))
                              .toList();
-    return new StringShareDecoder().convert(stringShares);
+    var result = new StringShareDecoder().convert(stringShares);
+    return base64toUtf8(result);
+  }
+  
+  static String base64toUtf8(String base64) {
+    var utfBytes = CryptoUtils.base64StringToBytes(base64);
+    return UTF8.decode(utfBytes);
   }
 }

@@ -1,24 +1,22 @@
 name: duse
-version: 0.0.2
+version: 0.1.0
 description: A minimal command-line application.
 author: Axel Christ <adracus@gmail.com>
 #homepage: https://www.example.com
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
+  secret_sharing: ">=0.1.0 <0.2.0"
   restpoint:
     git:
       url: git://github.com/Adracus/restpoint.git
       ref: 527ac55c0ee9b4e28c4d7cb7d0759a483e8a5d4d
-  secret_sharing:
-    git:
-      url: git://github.com/duse-io/secret-sharing-dart.git
-      ref: 8c58b227b0e5108b416dd49f2f0d1f6e5a7e4e3b
   rsa:
     git:
       url: git://github.com/Adracus/rsa.git
       ref: 51b2fea1462bd28fa1a5afa1f7a3e26504640fff
   unscripted: ">=0.5.2+1 <0.6.0"
+  crypto: ">=0.9.0 <0.10.0"
 dev_dependencies:
   unittest: any
   mock: any
