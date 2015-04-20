@@ -31,8 +31,6 @@ void defineTests() {
             ..when(callsTo("sign", anything))
              .thenReturn("SIGNATURE1")
              .thenReturn("SIGNATURE2");
-          var random = new RandomMock()
-            ..when(callsTo("nextInt")).alwaysReturn(0);
           var public = new KeyPairMock()
             ..when(callsTo("encrypt", anything))
              .thenReturn("ENCRYPTED1")
@@ -44,7 +42,7 @@ void defineTests() {
           var users = new List.filled(2, user);
           
           var fragments =
-              DuseSecret.generateFragments("my secret", users, private, 2, 10);
+              DuseSecret.generateFragments("secret", users, private, 2, 10);
           var parts = fragments.single.parts;
           
           expect(parts.first.share, equals("ENCRYPTED1"));

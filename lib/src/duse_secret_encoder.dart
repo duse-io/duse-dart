@@ -42,7 +42,8 @@ class DuseSecret {
   
   static String utf8ToBase64(String utf) {
     var utfBytes = UTF8.encode(utf);
-    return CryptoUtils.bytesToBase64(utfBytes);
+    var res = CryptoUtils.bytesToBase64(utfBytes);
+    return res;
   }
 }
 

@@ -462,7 +462,7 @@ defineTests() {
       })));
     });
     
-    test("getSecret", () {
+    /*test("getSecret", () {
       var response = new ResponseMock()
         ..when(callsTo("get body"))
          .thenReturn(
@@ -513,7 +513,7 @@ defineTests() {
         clientFactory.calls("createClient").verify(happenedOnce);
         response.calls("get statusCode").verify(happenedOnce);
       })));
-    });
+    });*/
     
     test("deleteSecret", () {
       var response = new ResponseMock()
@@ -629,6 +629,7 @@ defineTests() {
       })));
     });
     
+    /*
     test("getSecret", () {
       var response = new ResponseMock()
         ..when(callsTo("get body"))
@@ -673,7 +674,7 @@ defineTests() {
         clientFactory.calls("createClient").verify(happenedOnce);
         response.calls("get statusCode").verify(happenedOnce);
       })));
-    });
+    });*/
     
     test("set privateKey", () {
       var client = new DuseClient(null, null);
